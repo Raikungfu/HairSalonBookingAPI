@@ -127,9 +127,44 @@ namespace BusinessObject.ResponseDTO
         public double TotalPrice { get; set; }
         public User Customer { get; set; } = null!;
         public Voucher? Voucher { get; set; }
+        public BookingStatus Status { get; set; }
         public ICollection<Payment> Payments { get; set; }
         public virtual ICollection<BookingDetail> BookingDetails { get; set; }
     }
+
+    public class ViewManageBookingDTO
+    {
+        public int BookingId { get; set; }
+        public double TotalPrice { get; set; }
+        public ViewUserDTO Customer { get; set; } = null!;
+        public Voucher? Voucher { get; set; }
+        public BookingStatus Status { get; set; }
+        public ICollection<ViewPaymentDTO> Payments { get; set; }
+    }
+
+    public class ViewUserDTO
+    {
+        public int UserId { get; set; }
+        public string? UserName { get; set; }
+        public string? Phone { get; set; }
+        public UserStatus? Status { get; set; }
+        public UserRole? Role { get; set; }
+    }
+
+    public class ViewPaymentDTO
+    {
+        public int PaymentId { get; set; }
+        public double? Amount { get; set; }
+        public DateTime? PaymentDate { get; set; }
+        public int? Status { get; set; }
+        public int? BookingId { get; set; }
+        public int? PaymentTypeId { get; set; }
+        public DateTime? CreateDate { get; set; }
+        public string? CreateBy { get; set; }
+        public DateTime? UpdateDate { get; set; }
+        public string? UpdateBy { get; set; }
+    }
+
 
     public class UserListDTO
     {

@@ -8,6 +8,7 @@ using static BusinessObject.RequestDTO.RequestDTO;
 
 namespace Fall2024__SWD392_SE1704_111.Controllers
 {
+    [AllowAnonymous]
     [Route("api/v1/voucher")]
     [ApiController]
     public class VoucherController : ControllerBase

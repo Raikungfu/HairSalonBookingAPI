@@ -10,6 +10,7 @@ namespace BusinessObject
     {
         #region Error Codes
         public static int ERROR_EXCEPTION = -4;
+        public static int UNAUTHORIZED_CODE = -5;
         #endregion
 
         #region Success Codes

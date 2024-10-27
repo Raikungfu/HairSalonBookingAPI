@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Fall2024__SWD392_SE1704_111.Controllers
 {
+    [AllowAnonymous]
     [Route("api/v1/reports")]
     [ApiController]
     public class ReportController : ControllerBase

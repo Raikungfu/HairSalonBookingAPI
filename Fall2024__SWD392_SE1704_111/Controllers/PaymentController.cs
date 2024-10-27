@@ -6,6 +6,7 @@ using static BusinessObject.RequestDTO.RequestDTO;
 
 namespace Fall2024__SWD392_SE1704_111.Controllers
 {
+    [AllowAnonymous]
     [Route("api/v1/payment")]
     [ApiController]
     public class PaymentController : ControllerBase
@@ -19,19 +20,11 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
         }
 
         [HttpPost("checkout")]
-        public IActionResult CheckOut([FromBody] CheckoutRequestDTO checkoutRequest, string payment)
+        public IActionResult CheckOut([FromBody] VnPaymentRequestModel checkoutRequest)
         {
-            if (payment == "VNPay")
+            if (checkoutRequest.VnPayMethod == VnPayMethod.ATM || checkoutRequest.VnPayMethod == VnPayMethod.CreditCard)
             {
-                var vnPayModel = new VnPaymentRequestModel
-                {
-                    TotalPrice = checkoutRequest.TotalPrice,
-                    CreateDate = checkoutRequest.CreateDate,
-                    Description = checkoutRequest.Description,
-                    FullName = checkoutRequest.FullName,
-                    BookingId = checkoutRequest.BookingId,
-                };
-                return Ok(new { paymentUrl = _paymentService.CreatePaymentUrl(HttpContext, vnPayModel) });
+                return Ok(new { paymentUrl = _paymentService.CreatePaymentUrl(HttpContext, checkoutRequest) });
             }
             return BadRequest("Invalid payment method");
         }

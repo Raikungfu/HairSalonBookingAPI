@@ -22,6 +22,13 @@ namespace BusinessObject.Mapper
                 .ForMember(dest => dest.Payments, opt => opt.MapFrom(src => src.Payments))
                 .ForMember(dest => dest.BookingDetails, opt => opt.MapFrom(src => src.BookingDetails));
 
+            CreateMap<Booking, ViewManageBookingDTO>()
+                .ForMember(dest => dest.BookingId, opt => opt.MapFrom(src => src.BookingId))
+                .ForMember(dest => dest.Customer, opt => opt.MapFrom(src => src.Customer))
+                .ForMember(dest => dest.Voucher, opt => opt.MapFrom(src => src.Voucher))
+                .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => src.TotalPrice))
+                .ForMember(dest => dest.Payments, opt => opt.MapFrom(src => src.Payments));
+
             CreateMap<Booking, BookingRequestDTO>()
                 .ForMember(dest => dest.VoucherId, opt => opt.MapFrom(src => src.VoucherId))
                 .ForMember(dest => dest.ScheduleId, opt => opt.MapFrom(src => src.ScheduleId))

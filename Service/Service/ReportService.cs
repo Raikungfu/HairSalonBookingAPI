@@ -16,9 +16,11 @@ using static BusinessObject.ReportEnum;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Service.Service
 {
+    [AllowAnonymous]
     public class ReportService : IReportService
     {
         private readonly IUnitOfWork _unitOfWork;

@@ -1,10 +1,12 @@
 ﻿using BusinessObject.ResponseDTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.IService;
 using static BusinessObject.ResponseDTO.ReportDTO;
 
 namespace Fall2024__SWD392_SE1704_111.Controllers
 {
+    [AllowAnonymous]
     [Route("api/v1/booking")]
     [ApiController]
     public class BookingDetailController : ControllerBase

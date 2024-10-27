@@ -314,5 +314,31 @@ namespace Service.Service
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
             }
         }
+
+        public async Task<ResponseDTO> GetCurrentUser()
+        {
+            try
+            {               
+                var user = await _jWTService.GetCurUserAsync();
+                if (user == null)
+                {
+                    return new ResponseDTO(Const.UNAUTHORIZED_CODE, "User not found.");
+                }
+
+                // Lấy hồ sơ người dùng và ánh xạ sang DTO
+                var userProfileDto = _mapper.Map<ViewUserDTO>(user);
+                userProfileDto.Phone = user.Phone;
+
+                return new ResponseDTO(Const.SUCCESS_READ_CODE, "User profile retrieved successfully.", userProfileDto);
+            }
+            catch (Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException)
+            {
+                return new ResponseDTO(Const.UNAUTHORIZED_CODE, "Token has expired.");
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
     }
 }

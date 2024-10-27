@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VNPAY_CS_ASPX;
 using static BusinessObject.ReportEnum;
 using static BusinessObject.UserProfileEnum;
 
@@ -33,6 +34,8 @@ namespace BusinessObject.RequestDTO
         {
             public string? UserName { get; set; }
             public string? Phone { get; set; }
+
+            public string? Password { get; set; }
             public int? VoucherId { get; set; }
             [Required]
             public int ScheduleId { get; set; }
@@ -202,13 +205,21 @@ namespace BusinessObject.RequestDTO
             public double TotalPrice { get; set; }
         }
 
+        public enum VnPayMethod
+        {
+            ATM = 0,
+            QRCode = 1,
+            CreditCard = 2
+        }
+
         public class VnPaymentRequestModel
         {
             public int BookingId { get; set; }
-            public string FullName { get; set; }
-            public string Description { get; set; }
+            public string? FullName { get; set; }
+            public string? Description { get; set; }
             public double? TotalPrice { get; set; }
             public DateTime CreateDate { get; set; }
+            public VnPayMethod VnPayMethod { get; set; }
         }
 
         public class UpdateVoucherDTO

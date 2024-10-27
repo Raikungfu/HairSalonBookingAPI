@@ -4,9 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using Service.IService;
 using Service.Service;
 using static BusinessObject.RequestDTO.RequestDTO;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace Fall2024__SWD392_SE1704_111.Controllers
 {
+    [AllowAnonymous]
     [Route("api/v1/hairservice")]
     [ApiController]
     public class HairServiceController : ControllerBase

@@ -22,7 +22,6 @@ namespace Repository.Repository
 
         public async Task<int> CreateBookingAsync(Booking entity)
         {
-
             _context.Add(entity);
             return await _context.SaveChangesAsync();
         }

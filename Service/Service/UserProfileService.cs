@@ -101,7 +101,7 @@ namespace Service.Service
                 var user = await _jWTService.GetCurrentUserAsync();
                 if (user == null)
                 {
-                    return new ResponseDTO(Const.FAIL_READ_CODE, "User not found.");
+                    return new ResponseDTO(Const.UNAUTHORIZED_CODE, "User not found.");
                 }
 
                 // Lấy hồ sơ người dùng và ánh xạ sang DTO
@@ -109,6 +109,10 @@ namespace Service.Service
                 userProfileDto.Phone = user.Phone;
 
                 return new ResponseDTO(Const.SUCCESS_READ_CODE, "User profile retrieved successfully.", userProfileDto);
+            }
+            catch (Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException)
+            {
+                return new ResponseDTO(Const.UNAUTHORIZED_CODE, "Token has expired.");
             }
             catch (Exception ex)
             {

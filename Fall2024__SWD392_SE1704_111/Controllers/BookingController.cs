@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Fall2024__SWD392_SE1704_111.Controllers
 {
+    [AllowAnonymous]
     [Route("api/v1/booking")]
     [ApiController]
-
     public class BookingController : ControllerBase
     {
         private readonly IBookingService _bookingService;

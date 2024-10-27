@@ -98,5 +98,38 @@ namespace Service
 
             return user;
         }
+
+        public async Task<User> GetCurUserAsync()
+        {
+            // Lấy token từ header Authorization
+            var token = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+
+            if (string.IsNullOrEmpty(token))
+            {
+                User existUser = null;
+                return existUser;
+            }
+
+            // Giải mã token để lấy thông tin người dùng
+            var claimsPrincipal = ValidateToken(token);
+
+            // Lấy UserId từ claims
+            var userIdClaim = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+            {
+                throw new Exception("User not found in token."); // Hoặc trả về một ResponseDTO nếu cần
+            }
+
+            int userId = int.Parse(userIdClaim.Value);
+
+            // Lấy người dùng hiện tại
+            var user = await _unitOfWork.UserRepository.GetUserByCurrentId(userId);
+            if (user == null)
+            {
+                throw new Exception("User not found!"); // Hoặc trả về một ResponseDTO nếu cần
+            }
+
+            return user;
+        }
     }
 }

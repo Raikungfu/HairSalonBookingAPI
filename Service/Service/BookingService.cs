@@ -20,12 +20,14 @@ namespace Service.Service
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IJWTService _jWTService;
+        private readonly IUserService _userService;
 
-        public BookingService(IUnitOfWork unitOfWork, IMapper mapper, IJWTService jWTService)
+        public BookingService(IUnitOfWork unitOfWork, IMapper mapper, IJWTService jWTService, IUserService userService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _jWTService = jWTService;
+            _userService = userService;
         }
 
         public async Task<ResponseDTO> ChangeBookingStatus(RequestDTO.ChangebookingStatusDTO request, int bookingId)
@@ -75,11 +77,13 @@ namespace Service.Service
                         RegisterRequestDTO registerRequestDTO = new RegisterRequestDTO();
                         registerRequestDTO.userName = bookingRequest.UserName;
                         registerRequestDTO.phone = bookingRequest.Phone;
+                        registerRequestDTO.password = bookingRequest.Password;
                         var registUser = _mapper.Map<User>(registerRequestDTO);
 
                         //Tạo  mới người dùng với 2 field UserName và Password
-                        var createAccountResponse = await _unitOfWork.UserRepository.CreateAsync(registUser);
-                        if (createAccountResponse <= 0)
+
+                        var createAccountResponse = await _userService.Register(registerRequestDTO);
+                        if (createAccountResponse.Status != 1)
                         {
                             return new ResponseDTO(Const.FAIL_CREATE_CODE, "Create Account Fail");
                         }
@@ -196,11 +200,11 @@ namespace Service.Service
             }
             
         }
-        public async Task<IEnumerable<ViewBookingDTO>> GetAllBookingsAsync(int page = 1, int pageSize = 10)
+        public async Task<IEnumerable<ViewManageBookingDTO>> GetAllBookingsAsync(int page = 1, int pageSize = 10)
         {
-            var bookings = await _unitOfWork.BookingRepository.GetAllAsync();
+            var bookings = _unitOfWork.BookingRepository.GetAllWithTwoInclude("Payments", "Customer");
             var pagedBookings = bookings.Skip((page - 1) * pageSize).Take(pageSize);
-            return _mapper.Map<IEnumerable<ViewBookingDTO>>(pagedBookings);
+            return _mapper.Map<IEnumerable<ViewManageBookingDTO>>(pagedBookings);
         }
 
         public async Task<ResponseDTO> GetBookingHistoryOfCurrentUser()

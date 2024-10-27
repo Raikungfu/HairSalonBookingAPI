@@ -23,19 +23,19 @@ builder.Services.AddControllers().AddNewtonsoftJson(o =>
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateIssuerSigningKey = true,
-            ValidateLifetime = true,
-            RoleClaimType = ClaimTypes.Role,
-            ValidAudience = builder.Configuration["JWT:Audience"],
-            ValidIssuer = builder.Configuration["JWT:Issuer"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateIssuerSigningKey = true,
+        ValidateLifetime = true,
+        RoleClaimType = ClaimTypes.Role,
+        ValidAudience = builder.Configuration["JWT:Audience"],
+        ValidIssuer = builder.Configuration["JWT:Issuer"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding
                 .UTF8.GetBytes(builder.Configuration["JWT:Key"]))
-        };
-    });
+    };
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -79,8 +79,10 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins("*")  // Cho phép mọi origin
              .AllowAnyMethod()
-             .AllowAnyHeader();
-             //.AllowCredentials();
+             .AllowAnyHeader()
+              .SetIsOriginAllowed(_ => true)
+              .WithExposedHeaders("Authorization");
+        //.AllowCredentials();
     });
 });
 
@@ -123,6 +125,7 @@ builder.Services.AddAutoMapper(typeof(BookingMapping));
 builder.Services.AddAutoMapper(typeof(UserProfileMaping));
 builder.Services.AddAutoMapper(typeof(ReportMapping));
 builder.Services.AddAutoMapper(typeof(VoucherMapping));
+builder.Services.AddAutoMapper(typeof(PaymentMapping));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -131,11 +134,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseHttpsRedirection();
+else
+{
+    app.UseHttpsRedirection();
+}
 
 // Thêm dòng này để áp dụng chính sách CORS
 app.UseCors("MyPolicy");
+
+app.UseMiddleware<JwtMiddleware>();
 
 app.UseAuthentication();
 

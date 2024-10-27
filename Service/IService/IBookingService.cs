@@ -17,6 +17,6 @@ namespace Service.IService
         Task<ResponseDTO> CreateBooking(BookingRequestDTO bookingRequest);
 
         Task<ResponseDTO> GetBookingHistoryOfCurrentUser();
-        Task<IEnumerable<ViewBookingDTO>> GetAllBookingsAsync(int page = 1, int pageSize = 10);
+        Task<IEnumerable<ViewManageBookingDTO>> GetAllBookingsAsync(int page = 1, int pageSize = 10);
     }
 }

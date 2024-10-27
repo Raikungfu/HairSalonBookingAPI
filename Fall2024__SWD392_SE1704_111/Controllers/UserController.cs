@@ -5,10 +5,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.IService;
 using Service.Service;
+using System.Dynamic;
+using System.Globalization;
+using System.Security.Claims;
 using static BusinessObject.RequestDTO.RequestDTO;
 
 namespace Fall2024__SWD392_SE1704_111.Controllers
 {
+    [AllowAnonymous]
     [Route("api/v1/users")]
     [ApiController]
     public class UserController : ControllerBase
@@ -18,6 +22,7 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
         {
             _userService = userService;
         }
+
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDTO request)
         {
@@ -56,6 +61,28 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
+        }
+
+        [Authorize]
+        [HttpGet("current")]
+        public async Task<IActionResult> GetCurrentUser()
+        {
+            var response = await _userService.GetCurrentUser();
+
+            if (response.Status != Const.SUCCESS_READ_CODE)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
+
+        string ConvertToCamelCase(string input)
+        {
+            if (string.IsNullOrEmpty(input) || char.IsLower(input[0]))
+                return input;
+
+            return char.ToLower(input[0], CultureInfo.InvariantCulture) + input.Substring(1);
         }
 
         [Authorize(Roles = "Admin, Manager")]
