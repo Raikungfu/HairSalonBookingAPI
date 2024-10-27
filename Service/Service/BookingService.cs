@@ -207,6 +207,12 @@ namespace Service.Service
             return _mapper.Map<IEnumerable<ViewManageBookingDTO>>(pagedBookings);
         }
 
+        public async Task<IEnumerable<ViewManageBookingStylistDTO>> GetAllBookingsForStylistAsync(int id)
+        {
+            var bookings = await _unitOfWork.BookingRepository.GetBookingByStylistIdAsync(id);
+            return _mapper.Map<IEnumerable<ViewManageBookingStylistDTO>>(bookings);
+        }
+
         public async Task<ResponseDTO> GetBookingHistoryOfCurrentUser()
         {
             try
@@ -235,5 +241,6 @@ namespace Service.Service
                 return new ResponseDTO(Const.ERROR_EXCEPTION, ex.Message);
             }
         }
+
     }
 }

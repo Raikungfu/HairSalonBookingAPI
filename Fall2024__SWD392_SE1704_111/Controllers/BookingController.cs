@@ -5,6 +5,7 @@ using static BusinessObject.RequestDTO.RequestDTO;
 using Service.IService;
 using Service.Service;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace Fall2024__SWD392_SE1704_111.Controllers
 {
@@ -86,6 +87,21 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
         public async Task<IActionResult> GetAllBookings(int page = 1, int pageSize = 10)
         {
             var bookings = await _bookingService.GetAllBookingsAsync(page, pageSize);
+            return Ok(bookings);
+        }
+
+        [Authorize(Roles = "Stylist")]
+        [HttpGet("current-stylist")]
+        public async Task<IActionResult> GetAllBookingsForCurrentStylist()
+        {
+            var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if(id == null || !int.TryParse(id, out int stylistId))
+            {
+                return BadRequest(new ResponseDTO(Const.FAIL_READ_CODE, "Invalid request."));
+            }
+
+            var bookings = await _bookingService.GetAllBookingsForStylistAsync(stylistId);
             return Ok(bookings);
         }
     }

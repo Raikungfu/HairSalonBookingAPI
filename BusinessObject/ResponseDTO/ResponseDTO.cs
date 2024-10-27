@@ -142,6 +142,25 @@ namespace BusinessObject.ResponseDTO
         public ICollection<ViewPaymentDTO> Payments { get; set; }
     }
 
+
+
+    public class ViewManageBookingStylistDTO
+    {
+        public int BookingId { get; set; }
+        public double TotalPrice { get; set; }
+        public ViewUserDTO Customer { get; set; } = null!;
+        public Voucher? Voucher { get; set; }
+        public BookingStatus Status { get; set; }
+        public ICollection<ViewBookingDetailDTO> BookingDetails { get; set; }
+    }
+
+    public class ViewBookingDetailDTO
+    {
+        public int BookingDetailId { get; set; }
+        public string? ServiceName { get; set; }
+        public string? StylistName { get; set; }
+    }
+
     public class ViewUserDTO
     {
         public int UserId { get; set; }

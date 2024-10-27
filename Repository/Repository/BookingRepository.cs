@@ -37,5 +37,19 @@ namespace Repository.Repository
                 .Include(b => b.Schedule)
                 .ToListAsync();
         }
+
+        public async Task<List<Booking>> GetBookingByStylistIdAsync(int stylistId)
+        {
+            var result = await _context.Bookings
+                .Where(b => b.BookingDetails.Any(bd => bd.StylistId == stylistId))
+                .Include(b => b.Customer)
+                .Include(b => b.BookingDetails)
+                    .ThenInclude(bd => bd.Service)
+                .Include(b => b.BookingDetails)
+                    .ThenInclude(bd => bd.Stylist)
+                .Include(b => b.Schedule)
+                .ToListAsync();
+            return result;
+        }
     }
 }

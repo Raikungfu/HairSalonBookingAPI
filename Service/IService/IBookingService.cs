@@ -18,5 +18,6 @@ namespace Service.IService
 
         Task<ResponseDTO> GetBookingHistoryOfCurrentUser();
         Task<IEnumerable<ViewManageBookingDTO>> GetAllBookingsAsync(int page = 1, int pageSize = 10);
+        Task<IEnumerable<ViewManageBookingStylistDTO>> GetAllBookingsForStylistAsync(int id);
     }
 }

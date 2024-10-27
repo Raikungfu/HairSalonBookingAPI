@@ -31,5 +31,6 @@ namespace Fall2024__SWD392_SE1704_111.Controllers
             }
             return Ok(bookingDetail);
         }
+
     }
 }
