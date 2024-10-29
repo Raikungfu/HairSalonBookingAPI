@@ -52,6 +52,7 @@ namespace BusinessObject.ResponseDTO
         public string? ImageLink { get; set; }
         public string? ServiceName { get; set; }
         public string? Description { get; set; }
+        public int? Status { get; set; }
         public double? Price { get; set; }
         public TimeSpan? EstimateTime { get; set; }
     }
